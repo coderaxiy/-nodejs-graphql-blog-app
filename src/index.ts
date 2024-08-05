@@ -12,6 +12,7 @@ import session from "express-session";
 import RedisStore from "connect-redis";
 import { MyContext } from "./types";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
@@ -27,13 +28,20 @@ const main = async () => {
   });
 
   app.use(
+    cors({
+      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+      credentials: true,
+    })
+  );
+
+  app.use(
     session({
       name: "pishiriq",
-      store: new RedisStore({ client: redisClient, disableTouch: true }),
+      store: new RedisStore({ client: redisClient }),
       cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 30, // one month
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
         httpOnly: true,
-        sameSite: __prod__ ? "lax" : "none",
+        sameSite: "lax",
         secure: __prod__,
       },
       saveUninitialized: false,

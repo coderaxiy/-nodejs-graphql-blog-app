@@ -117,4 +117,17 @@ export class UserResolver {
   users(@Ctx() { em }: MyContext): Promise<User[]> {
     return em.find(User, {});
   }
+
+  @Mutation(() => Boolean)
+  logout(@Ctx() { req, res }: MyContext) {
+    return new Promise((resolve) =>
+      req.session.destroy((err) => {
+        if (err) {
+          return resolve(false);
+        }
+        res.clearCookie("pishiriq");
+        return resolve(true);
+      })
+    );
+  }
 }

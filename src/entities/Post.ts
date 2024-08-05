@@ -23,4 +23,8 @@ export class Post {
   @Field()
   @Property({ type: "text" })
   title!: string;
+
+  @Field()
+  @Property({ type: "text", nullable: true })
+  description?: string;
 }

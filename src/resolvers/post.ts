@@ -19,15 +19,17 @@ export class PostResolver {
   @Query(() => Post)
   async createPost(
     @Arg("title") title: string,
+    @Arg("description") description: string,
     @Ctx() { em }: MyContext
   ): Promise<Post | null> {
-    const post = em.create(Post, {
+    const newPost = em.create(Post, {
       title,
+      description,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
-    await em.persistAndFlush(post);
-    return post;
+    await em.persistAndFlush(newPost);
+    return newPost;
   }
 
   @Mutation(() => Post)
