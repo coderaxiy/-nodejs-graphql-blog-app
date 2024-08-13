@@ -8,29 +8,29 @@ export class User {
   @PrimaryKey()
   id!: number;
 
-  @Field(() => String)
-  @Property({ type: "timestamp with time zone", onCreate: () => new Date() })
-  createdAt = new Date();
-
-  @Field(() => String, { nullable: true })
-  @Property({
-    type: "timestamp with time zone",
-    onUpdate: () => new Date(),
-    nullable: true,
-  })
-  updatedAt = new Date();
-
   @Field()
-  @Property({ type: "text" })
+  @Property({ type: "varchar" })
   firstName: string;
 
   @Field()
-  @Property({ type: "text", nullable: true })
+  @Property({ type: "varchar", nullable: true })
   lastName!: string;
 
   @Field()
-  @Property({ type: "text", unique: true })
+  @Property({ type: "varchar", unique: true })
   username: string;
+
+  @Field({ nullable:true })
+  @Property({ type: "varchar", nullable: true })
+  tags?: string;
+
+  @Field({ nullable: true })
+  @Property({ type: "text", nullable: true })
+  about?: string;
+
+  @Field({ nullable: true })
+  @Property({ type: "text", nullable: true })
+  imageUrl?: string;  
 
   @Field()
   @Property({ type: "text", nullable: false })

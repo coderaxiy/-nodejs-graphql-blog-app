@@ -13,7 +13,10 @@ import RedisStore from "connect-redis";
 import { MyContext } from "./types";
 import dotenv from "dotenv";
 import cors from "cors";
-
+import {graphqlUploadExpress} from 'graphql-upload-ts'
+import path from "path";
+import { BioResolver } from "./resolvers/bio";
+ 
 dotenv.config();
 
 const main = async () => {
@@ -29,10 +32,14 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+      origin: ["http://localhost:3000", "http://localhost:3001", "https://studio.apollographql.com"],
       credentials: true,
     })
   );
+
+  app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
+
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10, overrideSendResponse: false }))
 
   app.use(
     session({
@@ -52,7 +59,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver, PostResolver, UserResolver],
+      resolvers: [HelloResolver, PostResolver, UserResolver, BioResolver],
       validate: false,
     }),
     context: ({ req, res }): MyContext => ({ em: orm.em, req, res }),

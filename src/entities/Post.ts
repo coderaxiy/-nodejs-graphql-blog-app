@@ -26,5 +26,9 @@ export class Post {
 
   @Field()
   @Property({ type: "text", nullable: true })
+  imageUrl?: string;
+
+  @Field()
+  @Property({ type: "text", nullable: true })
   description?: string;
 }

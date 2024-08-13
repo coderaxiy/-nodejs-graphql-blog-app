@@ -1,18 +1,18 @@
 import { MikroORM, PostgreSqlDriver } from "@mikro-orm/postgresql";
 import { Post } from "./entities/Post";
+import { User } from "./entities/User";
 import path from "path";
 import dotenv from "dotenv";
-import { User } from "./entities/User";
 import { __prod__ } from "./constants";
+import { Bio } from "./entities/Bio";
+
 dotenv.config();
 
-export default {
-  entities: [Post, User],
+const config = {
+  entities: [Post, User, Bio],
   migrations: {
-    tableName: "migrations",
-    path: path.join(__dirname, "./migrations"),
-    pathTs: path.join(__dirname, "./migrations"),
-    pathJs: path.join(__dirname, "../dist/migrations"),
+    path: path.resolve(__dirname, "./migrations"), // Use absolute paths
+    pathTs: path.resolve(__dirname, "./migrations"), // Use absolute paths
     glob: "!(*.d).{js,ts}",
   },
   allowGlobalContext: true,
@@ -22,4 +22,6 @@ export default {
   password: process.env.DB_PASSWORD,
   driver: PostgreSqlDriver,
   debug: !__prod__,
-} as Parameters<typeof MikroORM.init>[0];
+};
+
+export default config as Parameters<typeof MikroORM.init>[0];
